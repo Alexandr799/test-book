@@ -1,0 +1,24 @@
+# Yii2
+/vendor/
+/runtime/
+/web/assets/
+/web/uploads/
+
+# Environment
+.env
+.env.local
+docker.env
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Composer
+composer.lock
+
