@@ -28,5 +28,5 @@ echo "✓ Файл docker.env создан"
 echo "  USER_ID=${USER_ID}"
 echo "  GROUP_ID=${GROUP_ID}"
 echo ""
-echo "Теперь можно запустить: docker-compose up -d --build"
+echo "Теперь можно запустить: docker compose up -d --build"
 

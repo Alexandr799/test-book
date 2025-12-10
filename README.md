@@ -58,10 +58,34 @@ id -g  # ваш GROUP_ID
 ### 4. Запустите Docker-контейнеры
 
 ```bash
-docker-compose up -d --build
+docker compose up -d --build
 ```
 
-### 5. Проверьте работу
+**Примечание:** Используйте `docker compose` (без дефиса) - это новая версия Docker Compose V2.
+
+**Если получаете ошибку прав доступа к Docker:**
+```bash
+# Добавьте пользователя в группу docker
+sudo usermod -aG docker $USER
+
+# Перезайдите в систему или выполните:
+newgrp docker
+
+# Проверьте, что права применились:
+docker ps
+```
+
+После этого повторите команду запуска.
+
+### 5. Выполните миграции
+
+Если база пустая, выполните миграции:
+
+```bash
+docker compose exec php php yii migrate --interactive=0
+```
+
+### 6. Проверьте работу
 
 Откройте в браузере: **http://localhost:8080**
 

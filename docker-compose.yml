@@ -1,11 +1,53 @@
-version: '2'
 services:
-  php:
-    image: yiisoftware/yii2-php:7.4-apache
-    volumes:
-      - ~/.composer-docker/cache:/root/.composer/cache:delegated
-      - ./:/app:delegated
+  nginx:
+    image: nginx:alpine
+    container_name: yii2_nginx
     ports:
-      - '8000:80'
+      - "8080:80"
+    volumes:
+      - ./:/var/www/html
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php
+    networks:
+      - yii2_network
+
+  php:
+    build:
+      context: ./docker/php
+      args:
+        USER_ID: ${USER_ID:-1000}
+        GROUP_ID: ${GROUP_ID:-1000}
+    container_name: yii2_php
+    volumes:
+      - ./:/var/www/html
     environment:
+      - USER_ID=${USER_ID:-1000}
+      - GROUP_ID=${GROUP_ID:-1000}
       - SMSPILOT_API_KEY=${SMSPILOT_API_KEY:-}
+    depends_on:
+      - mysql
+    networks:
+      - yii2_network
+
+  mysql:
+    image: mysql:8.0
+    container_name: yii2_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root_password}
+      MYSQL_DATABASE: ${DB_NAME:-yii2_books}
+      MYSQL_USER: ${DB_USER:-yii2_user}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-yii2_password}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - yii2_network
+
+networks:
+  yii2_network:
+    driver: bridge
+
+volumes:
+  mysql_data:
