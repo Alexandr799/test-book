@@ -11,7 +11,7 @@ RUN apk add --no-cache \
     libpng-dev \
     libzip-dev \
     icu-dev \
-    oniguma-dev \
+    oniguruma-dev \
     bash \
     git \
     unzip \

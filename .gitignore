@@ -1,24 +1,33 @@
-# Yii2
-/vendor/
-/runtime/
-/web/assets/
-/web/uploads/
+# phpstorm project files
+.idea
 
-# Environment
-.env
-.env.local
-docker.env
+# netbeans project files
+nbproject
 
-# IDE
-.idea/
-.vscode/
-*.swp
-*.swo
+# zend studio for eclipse project files
+.buildpath
+.project
+.settings
 
-# OS
-.DS_Store
+# windows thumbnail cache
 Thumbs.db
 
-# Composer
-composer.lock
+# composer vendor dir
+/vendor
 
+# composer itself is not needed
+composer.phar
+
+# Mac DS_Store Files
+.DS_Store
+
+# phpunit itself is not needed
+phpunit.phar
+# local phpunit config
+/phpunit.xml
+
+tests/_output/*
+tests/_support/_generated
+
+#vagrant folder
+/.vagrant
