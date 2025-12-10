@@ -62,7 +62,10 @@ class Book extends ActiveRecord
             [['description'], 'string'],
             [['title', 'cover_image'], 'string', 'max' => 255],
             [['isbn'], 'string', 'max' => 20],
-            [['isbn'], 'unique'],
+            [['isbn'], 'trim'],
+            [['isbn'], 'default', 'value' => null],
+            [['isbn'], 'unique', 'message' => 'Книга с таким ISBN уже существует'],
+            [['isbn'], 'match', 'pattern' => '/^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$/i', 'message' => 'Неверный формат ISBN', 'skipOnEmpty' => true],
             [['coverFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg, jpeg', 'maxSize' => 1024 * 1024 * 2],
             [['author_ids'], 'safe'],
         ];

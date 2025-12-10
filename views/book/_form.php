@@ -19,7 +19,10 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
 
-    <?= $form->field($model, 'isbn')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'isbn')->textInput([
+        'maxlength' => true,
+        'placeholder' => '978-5-17-114589-0 (необязательно)'
+    ])->hint('Формат: 978-5-17-114589-0 или оставьте пустым') ?>
 
     <?= $form->field($model, 'author_ids')->dropDownList($authors, [
         'multiple' => true,
