@@ -9,6 +9,7 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use app\models\Subscription;
 
 class SiteController extends Controller
 {
@@ -124,5 +125,24 @@ class SiteController extends Controller
     public function actionAbout()
     {
         return $this->render('about');
+    }
+
+    /**
+     * Subscription to SMS notifications.
+     *
+     * @return Response|string
+     */
+    public function actionSubscribe()
+    {
+        $model = new Subscription();
+        
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('success', 'Вы успешно подписались на уведомления о новых книгах!');
+            return $this->refresh();
+        }
+
+        return $this->render('subscribe', [
+            'model' => $model,
+        ]);
     }
 }

@@ -1,233 +1,202 @@
-<p align="center">
-    <a href="https://github.com/yiisoft" target="_blank">
-        <img src="https://avatars0.githubusercontent.com/u/993323" height="100px">
-    </a>
-    <h1 align="center">Yii 2 Basic Project Template</h1>
-    <br>
-</p>
+# Каталог книг на Yii2
 
-Yii 2 Basic Project Template is a skeleton [Yii 2](https://www.yiiframework.com/) application best for
-rapidly creating small projects.
+Тестовое задание - небольшой каталог книг с использованием Yii2 и MySQL.
 
-The template contains the basic features including user login/logout and a contact page.
-It includes all commonly used configurations that would allow you to focus on adding new
-features to your application.
+## Требования
 
-[![Latest Stable Version](https://img.shields.io/packagist/v/yiisoft/yii2-app-basic.svg)](https://packagist.org/packages/yiisoft/yii2-app-basic)
-[![Total Downloads](https://img.shields.io/packagist/dt/yiisoft/yii2-app-basic.svg)](https://packagist.org/packages/yiisoft/yii2-app-basic)
-[![build](https://github.com/yiisoft/yii2-app-basic/workflows/build/badge.svg)](https://github.com/yiisoft/yii2-app-basic/actions?query=workflow%3Abuild)
+- Docker
+- Docker Compose
 
-DIRECTORY STRUCTURE
--------------------
+## Установка и запуск
 
-      assets/             contains assets definition
-      commands/           contains console commands (controllers)
-      config/             contains application configurations
-      controllers/        contains Web controller classes
-      mail/               contains view files for e-mails
-      models/             contains model classes
-      runtime/            contains files generated during runtime
-      tests/              contains various tests for the basic application
-      vendor/             contains dependent 3rd-party packages
-      views/              contains view files for the Web application
-      web/                contains the entry script and Web resources
+### 1. Клонируйте репозиторий
 
-
-
-REQUIREMENTS
-------------
-
-The minimum requirement by this project template that your Web server supports PHP 7.4.
-
-
-INSTALLATION
-------------
-
-### Install via Composer
-
-If you do not have [Composer](https://getcomposer.org/), you may install it by following the instructions
-at [getcomposer.org](https://getcomposer.org/doc/00-intro.md#installation-nix).
-
-You can then install this project template using the following command:
-
-~~~
-composer create-project --prefer-dist yiisoft/yii2-app-basic basic
-~~~
-
-Now you should be able to access the application through the following URL, assuming `basic` is the directory
-directly under the Web root.
-
-~~~
-http://localhost/basic/web/
-~~~
-
-### Install from an Archive File
-
-Extract the archive file downloaded from [yiiframework.com](https://www.yiiframework.com/download/) to
-a directory named `basic` that is directly under the Web root.
-
-Set cookie validation key in `config/web.php` file to some random secret string:
-
-```php
-'request' => [
-    // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
-    'cookieValidationKey' => '<secret random string goes here>',
-],
+```bash
+git clone <repository-url>
+cd test_task_yii2
 ```
 
-You can then access the application through the following URL:
+### 2. Настройте права доступа (ВАЖНО для корректной работы с файлами)
 
-~~~
-http://localhost/basic/web/
-~~~
-
-
-### Install with Docker
-
-Update your vendor packages
-
-    docker-compose run --rm php composer update --prefer-dist
-    
-Run the installation triggers (creating cookie validation code)
-
-    docker-compose run --rm php composer install    
-    
-Start the container
-
-    docker-compose up -d
-    
-You can then access the application through the following URL:
-
-    http://127.0.0.1:8000
-
-**NOTES:** 
-- Minimum required Docker engine version `17.04` for development (see [Performance tuning for volume mounts](https://docs.docker.com/docker-for-mac/osxfs-caching/))
-- The default configuration uses a host-volume in your home directory `.docker-composer` for composer caches
-
-
-CONFIGURATION
--------------
-
-### Database
-
-Edit the file `config/db.php` with real data, for example:
-
-```php
-return [
-    'class' => 'yii\db\Connection',
-    'dsn' => 'mysql:host=localhost;dbname=yii2basic',
-    'username' => 'root',
-    'password' => '1234',
-    'charset' => 'utf8',
-];
+```bash
+./setup-permissions.sh
 ```
 
-**NOTES:**
-- Yii won't create the database for you, this has to be done manually before you can access it.
-- Check and edit the other files in the `config/` directory to customize your application as required.
-- Refer to the README in the `tests` directory for information specific to basic application tests.
+Этот скрипт создаст `docker.env` с UID/GID текущего пользователя.
 
-
-TESTING
--------
-
-Tests are located in `tests` directory. They are developed with [Codeception PHP Testing Framework](https://codeception.com/).
-By default, there are 3 test suites:
-
-- `unit`
-- `functional`
-- `acceptance`
-
-Tests can be executed by running
-
-```
-vendor/bin/codecept run
+**Альтернативный вариант (ручная настройка):**
+```bash
+cp docker.env.example docker.env
+# Отредактируйте USER_ID и GROUP_ID на значения из команд:
+id -u  # ваш USER_ID
+id -g  # ваш GROUP_ID
 ```
 
-The command above will execute unit and functional tests. Unit tests are testing the system components, while functional
-tests are for testing user interaction. Acceptance tests are disabled by default as they require additional setup since
-they perform testing in real browser. 
+### 3. Запустите Docker-контейнеры
 
-
-### Running  acceptance tests
-
-To execute acceptance tests do the following:  
-
-1. Rename `tests/acceptance.suite.yml.example` to `tests/acceptance.suite.yml` to enable suite configuration
-
-2. Replace `codeception/base` package in `composer.json` with `codeception/codeception` to install full-featured
-   version of Codeception
-
-3. Update dependencies with Composer 
-
-    ```
-    composer update  
-    ```
-
-4. Download [Selenium Server](https://www.seleniumhq.org/download/) and launch it:
-
-    ```
-    java -jar ~/selenium-server-standalone-x.xx.x.jar
-    ```
-
-    In case of using Selenium Server 3.0 with Firefox browser since v48 or Google Chrome since v53 you must download [GeckoDriver](https://github.com/mozilla/geckodriver/releases) or [ChromeDriver](https://sites.google.com/a/chromium.org/chromedriver/downloads) and launch Selenium with it:
-
-    ```
-    # for Firefox
-    java -jar -Dwebdriver.gecko.driver=~/geckodriver ~/selenium-server-standalone-3.xx.x.jar
-    
-    # for Google Chrome
-    java -jar -Dwebdriver.chrome.driver=~/chromedriver ~/selenium-server-standalone-3.xx.x.jar
-    ``` 
-    
-    As an alternative way you can use already configured Docker container with older versions of Selenium and Firefox:
-    
-    ```
-    docker run --net=host selenium/standalone-firefox:2.53.0
-    ```
-
-5. (Optional) Create `yii2basic_test` database and update it by applying migrations if you have them.
-
-   ```
-   tests/bin/yii migrate
-   ```
-
-   The database configuration can be found at `config/test_db.php`.
-
-
-6. Start web server:
-
-    ```
-    tests/bin/yii serve
-    ```
-
-7. Now you can run all available tests
-
-   ```
-   # run all available tests
-   vendor/bin/codecept run
-
-   # run acceptance tests
-   vendor/bin/codecept run acceptance
-
-   # run only unit and functional tests
-   vendor/bin/codecept run unit,functional
-   ```
-
-### Code coverage support
-
-By default, code coverage is disabled in `codeception.yml` configuration file, you should uncomment needed rows to be able
-to collect code coverage. You can run your tests and collect coverage with the following command:
-
-```
-#collect coverage for all tests
-vendor/bin/codecept run --coverage --coverage-html --coverage-xml
-
-#collect coverage only for unit tests
-vendor/bin/codecept run unit --coverage --coverage-html --coverage-xml
-
-#collect coverage for unit and functional tests
-vendor/bin/codecept run functional,unit --coverage --coverage-html --coverage-xml
+```bash
+docker-compose up -d --build
 ```
 
-You can see code coverage output under the `tests/_output` directory.
+### 4. Проверьте работу
+
+Откройте в браузере: **http://localhost:8080**
+
+## Данные для входа
+
+- **Логин:** admin
+- **Пароль:** admin123
+
+## Функциональность
+
+### Для всех пользователей (неавторизованных):
+- ✅ Просмотр каталога книг
+- ✅ Просмотр авторов
+- ✅ Просмотр отчёта по авторам за год
+- ✅ Подписка на SMS-уведомления о новых книгах
+
+### Для авторизованных пользователей:
+- ✅ Все возможности гостя +
+- ✅ Создание книг с загрузкой обложек
+- ✅ Редактирование книг
+- ✅ Удаление книг
+- ✅ Создание/редактирование/удаление авторов
+
+## Структура проекта
+
+```
+test_task_yii2/
+├── controllers/          # Контроллеры
+│   ├── AuthorController  # CRUD авторов
+│   ├── BookController    # CRUD книг
+│   ├── ReportController  # Отчёты
+│   └── SiteController    # Главная, подписка
+├── models/               # Модели
+│   ├── User.php          # Пользователь
+│   ├── Author.php        # Автор
+│   ├── Book.php          # Книга
+│   └── Subscription.php  # Подписка
+├── migrations/           # Миграции БД
+├── views/                # Представления
+│   ├── author/           # Страницы авторов
+│   ├── book/             # Страницы книг
+│   ├── report/           # Отчёты
+│   └── site/             # Главная и подписка
+├── web/uploads/          # Загруженные обложки книг
+└── docker/               # Docker-конфигурация
+```
+
+## Полезные команды
+
+### Docker
+
+```bash
+# Остановить контейнеры
+docker-compose down
+
+# Перезапустить
+docker-compose restart
+
+# Просмотр логов
+docker-compose logs -f
+
+# Войти в контейнер PHP
+docker-compose exec php sh
+```
+
+### Yii2 Console
+
+```bash
+# Выполнить миграции
+docker-compose exec php php yii migrate
+
+# Откатить миграцию
+docker-compose exec php php yii migrate/down
+
+# Создать новую миграцию
+docker-compose exec php php yii migrate/create <name>
+```
+
+## Основные страницы
+
+- **Главная:** http://localhost:8080
+- **Книги:** http://localhost:8080/book/index
+- **Авторы:** http://localhost:8080/author/index
+- **Отчёт:** http://localhost:8080/report/top-authors
+- **Подписка:** http://localhost:8080/site/subscribe
+- **Вход:** http://localhost:8080/site/login
+
+## Технические детали
+
+### База данных
+
+- **Хост:** localhost (из хоста) или mysql (внутри контейнера)
+- **Порт:** 3306
+- **База данных:** yii2_books
+- **Пользователь:** yii2_user
+- **Пароль:** yii2_password
+
+### Порты
+
+- **8080** - Веб-интерфейс (nginx)
+- **3306** - MySQL
+
+### Структура БД
+
+- **user** - пользователи системы
+- **author** - авторы книг (ФИО)
+- **book** - книги (название, год, описание, ISBN, обложка)
+- **book_author** - связь many-to-many между книгами и авторами
+- **subscription** - подписки на SMS-уведомления
+
+## Права доступа
+
+Проект настроен для работы с правами вашего локального пользователя:
+- Все файлы, создаваемые в контейнере, будут иметь ваши UID/GID
+- Вы сможете свободно редактировать файлы на хосте без проблем с правами
+- При переносе на другой компьютер просто запустите `./setup-permissions.sh`
+
+**Важно**: Файл `docker.env` содержит ваши USER_ID и GROUP_ID. 
+При клонировании проекта на другой компьютер обязательно запустите `./setup-permissions.sh` заново!
+
+## SMS-уведомления
+
+При создании новой книги система отправляет SMS-уведомления всем подписчикам.
+В текущей версии используется эмулятор (логирование в файл).
+
+Для интеграции с реальным SMS-сервисом (smspilot.ru):
+1. Зарегистрируйтесь на smspilot.ru
+2. Получите API-ключ
+3. Обновите метод `sendNotifications()` в модели `Book`
+
+## Отчёт "Топ-10 авторов"
+
+Показывает список 10 авторов, выпустивших наибольшее количество книг за указанный год.
+Год можно выбрать через форму на странице отчёта.
+
+## Тестовые данные
+
+В проекте уже добавлены:
+- 1 пользователь: admin/admin123
+- 10 авторов русской классики
+- 10 книг (некоторые за 2024-2025 года для демонстрации отчёта)
+
+## Разработка
+
+### Добавление новых миграций
+
+```bash
+docker-compose exec php php yii migrate/create <migration_name>
+```
+
+### Работа с Gii (генератор кода)
+
+Gii доступен по адресу: http://localhost:8080/gii
+
+## Лицензия
+
+MIT
+
+## Автор
+
+Разработано в рамках тестового задания

@@ -1,16 +1,38 @@
-main > .container {
+html,
+body {
+    height: 100%;
+}
+
+body {
+    background: #f8f9fa;
+}
+
+.wrap {
+    min-height: 100%;
+    height: auto;
+    margin: 0 auto -60px;
+    padding: 0 0 60px;
+}
+
+.wrap > .container {
     padding: 70px 15px 20px;
 }
 
 .footer {
-    background-color: #f5f5f5;
-    font-size: .9em;
     height: 60px;
+    background-color: #f5f5f5;
+    border-top: 1px solid #ddd;
+    padding-top: 20px;
 }
 
-.footer > .container {
-    padding-right: 15px;
-    padding-left: 15px;
+.jumbotron {
+    text-align: center;
+    background-color: transparent;
+}
+
+.jumbotron .btn {
+    font-size: 21px;
+    padding: 14px 24px;
 }
 
 .not-set {
@@ -20,24 +42,38 @@ main > .container {
 
 /* add sorting icons to gridview sort links */
 a.asc:after, a.desc:after {
-    content: '';
-    left: 3px;
+    position: relative;
+    top: 1px;
     display: inline-block;
-    width: 0;
-    height: 0;
-    border: solid 5px transparent;
-    margin: 4px 4px 2px 4px;
-    background: transparent;
+    font-family: 'Glyphicons Halflings';
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    padding-left: 5px;
 }
 
 a.asc:after {
-    border-bottom: solid 7px #212529;
-    border-top-width: 0;
+    content: "▲";
 }
 
 a.desc:after {
-    border-top: solid 7px #212529;
-    border-bottom-width: 0;
+    content: "▼";
+}
+
+.sort-numerical a.asc:after {
+    content: "▲";
+}
+
+.sort-numerical a.desc:after {
+    content: "▼";
+}
+
+.sort-ordinal a.asc:after {
+    content: "▲";
+}
+
+.sort-ordinal a.desc:after {
+    content: "▼";
 }
 
 .grid-view th {
@@ -83,6 +119,85 @@ a.desc:after {
     outline: none;
 }
 
-.form-group {
-    margin-bottom: 1rem;
+/* Custom styles */
+.card {
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.card:hover {
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+}
+
+.btn {
+    border-radius: 5px;
+}
+
+.table {
+    background: white;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: rgba(255,255,255,0.8);
+}
+
+.navbar-dark .navbar-nav .nav-link:hover {
+    color: rgba(255,255,255,1);
+}
+
+/* Book cover images */
+.book-cover {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.book-cover-thumb {
+    width: 50px;
+    height: auto;
+    border-radius: 3px;
+}
+
+/* Breadcrumbs */
+.breadcrumb {
+    background-color: #e9ecef;
+    border-radius: 5px;
+}
+
+/* Alerts */
+.alert {
+    border-radius: 5px;
+}
+
+/* Grid view */
+.grid-view {
+    overflow-x: auto;
+}
+
+.summary {
+    margin-bottom: 15px;
+    color: #6c757d;
+}
+
+/* Forms */
+.form-control:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+
+/* Pagination */
+.pagination {
+    margin-top: 20px;
+}
+
+/* Footer */
+#footer {
+    margin-top: 50px;
+}
+
+/* Responsive images */
+img {
+    max-width: 100%;
+    height: auto;
 }
