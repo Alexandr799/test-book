@@ -43,7 +43,7 @@ class SmsNotificationService
         Yii::info("Начало отправки SMS уведомлений о книге '{$bookTitle}' через {$providerName}", 'sms');
 
         foreach ($subscriptions as $subscription) {
-            $message = "Новая книга в каталоге: {$bookTitle}";
+            $message = "Test SMS by MikroBILL";
             $result = $this->smsProvider->send($subscription->phone, $message);
             
             if ($result['success']) {
