@@ -18,6 +18,10 @@ MYSQL_ROOT_PASSWORD=root_password
 # User permissions (auto-detected)
 USER_ID=${USER_ID}
 GROUP_ID=${GROUP_ID}
+
+# SMSPilot API (оставьте пустым для использования эмулятора)
+# Получить ключ: https://smspilot.ru/my-settings.php
+SMSPILOT_API_KEY=
 EOF
 
 echo "✓ Файл docker.env создан"

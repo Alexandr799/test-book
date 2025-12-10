@@ -7,3 +7,5 @@ services:
       - ./:/app:delegated
     ports:
       - '8000:80'
+    environment:
+      - SMSPILOT_API_KEY=${SMSPILOT_API_KEY:-}

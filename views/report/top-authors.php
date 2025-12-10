@@ -15,17 +15,17 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><i class="bi bi-graph-up"></i> <?= Html::encode($this->title) ?></h1>
 
     <div class="mb-4 card p-3 shadow-sm">
-        <form method="get" action="<?= Url::to(['/report/top-authors']) ?>" class="row g-3 align-items-center">
+        <?= Html::beginForm(['report/top-authors'], 'get', ['class' => 'row g-3 align-items-center']) ?>
             <div class="col-auto">
                 <label for="year" class="col-form-label"><i class="bi bi-calendar"></i> Выберите год:</label>
             </div>
             <div class="col-auto">
-                <input type="number" name="year" id="year" value="<?= $year ?>" min="1900" max="<?= date('Y') + 10 ?>" class="form-control">
+                <input type="number" name="year" id="year" value="<?= Html::encode($year) ?>" min="1900" max="<?= date('Y') + 10 ?>" class="form-control" required>
             </div>
             <div class="col-auto">
                 <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i> Показать</button>
             </div>
-        </form>
+        <?= Html::endForm() ?>
     </div>
 
     <?php if (empty($authors)): ?>

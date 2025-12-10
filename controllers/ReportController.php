@@ -16,20 +16,23 @@ class ReportController extends Controller
      * Displays report of top 10 authors by book count for specified year.
      * @return mixed
      */
-    public function actionTopAuthors()
+    public function actionTopAuthors($year = null)
     {
-        $year = Yii::$app->request->get('year', date('Y'));
+        if ($year === null) {
+            $year = date('Y');
+        }
 
         // Получаем топ-10 авторов, выпустивших наибольшее количество книг за указанный год
         $authors = Author::find()
             ->select([
-                'author.id',
-                'author.full_name',
-                'COUNT(book.id) as book_count'
+                '{{%author}}.id',
+                '{{%author}}.full_name',
+                'COUNT({{%book}}.id) as book_count'
             ])
-            ->innerJoinWith('books')
-            ->where(['book.year' => $year])
-            ->groupBy(['author.id', 'author.full_name'])
+            ->innerJoin('{{%book_author}}', '{{%book_author}}.author_id = {{%author}}.id')
+            ->innerJoin('{{%book}}', '{{%book}}.id = {{%book_author}}.book_id')
+            ->where(['{{%book}}.year' => $year])
+            ->groupBy(['{{%author}}.id', '{{%author}}.full_name'])
             ->orderBy(['book_count' => SORT_DESC])
             ->limit(10)
             ->asArray()
