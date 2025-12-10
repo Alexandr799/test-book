@@ -89,6 +89,12 @@ docker-compose up -d --build
 
 ```
 test_task_yii2/
+├── components/           # Компоненты приложения
+│   └── sms/              # SMS сервисы
+│       ├── SmsSendableInterface.php      # Интерфейс отправки
+│       ├── SmsPilotService.php           # SMSPilot реализация
+│       ├── SmsEmulatorService.php        # Эмулятор для разработки
+│       └── SmsNotificationService.php    # Основной сервис уведомлений
 ├── controllers/          # Контроллеры
 │   ├── AuthorController  # CRUD авторов
 │   ├── BookController    # CRUD книг
@@ -97,7 +103,7 @@ test_task_yii2/
 ├── models/               # Модели
 │   ├── User.php          # Пользователь
 │   ├── Author.php        # Автор
-│   ├── Book.php          # Книга
+│   ├── Book.php          # Книга (использует smsService через DI)
 │   └── Subscription.php  # Подписка
 ├── migrations/           # Миграции БД
 ├── views/                # Представления
@@ -106,6 +112,7 @@ test_task_yii2/
 │   ├── report/           # Отчёты
 │   └── site/             # Главная и подписка
 ├── web/uploads/          # Загруженные обложки книг
+├── .env                  # Переменные окружения (как в Laravel)
 └── docker/               # Docker-конфигурация
 ```
 
@@ -233,6 +240,42 @@ SMSPILOT_API_KEY=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 **Конфигурация через .env:**
 Проект использует `.env` файл для всех настроек (как в Laravel). Все переменные из `.env` доступны через `$_ENV['VARIABLE_NAME']`.
+
+### Архитектура SMS-сервисов
+
+Система использует **Dependency Injection** и **Strategy Pattern** для гибкой работы с SMS:
+
+**Компоненты:**
+- `SmsSendableInterface` - интерфейс для любого SMS провайдера
+- `SmsPilotService` - реализация для SMSPilot API
+- `SmsEmulatorService` - эмулятор для разработки
+- `SmsNotificationService` - основной сервис уведомлений
+
+**Использование в коде:**
+```php
+// Отправка SMS через DI контейнер
+Yii::$app->smsService->send('+79001234567', 'Тестовое сообщение');
+
+// Уведомление всех подписчиков
+Yii::$app->smsService->notifyNewBook('Война и мир');
+```
+
+**Автоматический выбор провайдера:**
+- Если `SMSPILOT_API_KEY` в `.env` задан → используется реальная отправка через SMSPilot
+- Если пустой → используется эмулятор (логирование)
+
+**Добавление нового SMS провайдера:**
+1. Создайте класс, реализующий `SmsSendableInterface`
+2. Зарегистрируйте в `config/web.php`
+
+Пример для SMS.ru:
+```php
+class SmsRuService implements SmsSendableInterface {
+    public function send(string $phone, string $message): array {
+        // Реализация для SMS.ru API
+    }
+}
+```
 
 **Стоимость:** Согласно [тарифам SMSPilot](https://smspilot.ru/price.php), стоимость SMS в России от 1.5₽ за сообщение.
 

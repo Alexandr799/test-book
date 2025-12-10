@@ -164,57 +164,11 @@ class Book extends ActiveRecord
      */
     protected function sendNotifications()
     {
-        $subscriptions = Subscription::find()
-            ->where(['is_active' => true])
-            ->all();
-
-        $apiKey = Yii::$app->params['smspilot']['apikey'] ?? null;
+        /** @var \app\components\sms\SmsNotificationService $smsService */
+        $smsService = Yii::$app->smsService;
+        $result = $smsService->notifyNewBook($this->title);
         
-        foreach ($subscriptions as $subscription) {
-            $message = "Новая книга в каталоге: {$this->title}";
-            
-            // Если API-ключ не задан, используем эмулятор (логирование)
-            if (empty($apiKey) || $apiKey === 'YOUR_SMSPILOT_API_KEY_HERE') {
-                Yii::info("[ЭМУЛЯТОР] SMS to {$subscription->phone}: {$message}", 'sms');
-                continue;
-            }
-            
-            // Реальная отправка через SMSPilot API
-            try {
-                $phone = preg_replace('/[^0-9]/', '', $subscription->phone);
-                
-                // Формируем URL согласно документации SMSPilot
-                $url = 'https://smspilot.ru/api.php?' . http_build_query([
-                    'send' => $message,
-                    'to' => $phone,
-                    'apikey' => $apiKey,
-                    'format' => 'json',
-                ]);
-                
-                // Отправляем запрос
-                $response = @file_get_contents($url);
-                
-                if ($response === false) {
-                    throw new \Exception('Не удалось подключиться к SMSPilot API');
-                }
-                
-                $result = json_decode($response, true);
-                
-                // Проверяем результат
-                if (isset($result['error'])) {
-                    throw new \Exception($result['error']['description_ru'] ?? $result['error']['description']);
-                }
-                
-                if (isset($result['send'][0]['server_id'])) {
-                    Yii::info("SMS успешно отправлено на {$subscription->phone}. ID: {$result['send'][0]['server_id']}", 'sms');
-                } else {
-                    throw new \Exception('Неожиданный формат ответа от API');
-                }
-                
-            } catch (\Exception $e) {
-                Yii::error("Ошибка отправки SMS на {$subscription->phone}: " . $e->getMessage(), 'sms');
-            }
-        }
+        Yii::info("SMS уведомления о книге '{$this->title}': отправлено {$result['sent']}, ошибок {$result['failed']}", 'sms');
     }
 }
 

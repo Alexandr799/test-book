@@ -50,6 +50,18 @@ $config = [
             'rules' => [
             ],
         ],
+        'smsService' => function() {
+            // Выбираем провайдера в зависимости от наличия API ключа
+            $apiKey = $_ENV['SMSPILOT_API_KEY'] ?? '';
+            
+            if (!empty($apiKey)) {
+                $provider = new \app\components\sms\SmsPilotService($apiKey);
+            } else {
+                $provider = new \app\components\sms\SmsEmulatorService();
+            }
+            
+            return new \app\components\sms\SmsNotificationService($provider);
+        },
     ],
     'params' => $params,
 ];
